@@ -4,6 +4,7 @@
  */
 package com.example.demo.controller;
 
+import com.example.demo.model.AuthBean;
 import com.example.demo.model.UsuarioBean;
 import com.example.demo.service.BarbeiroService;
 import com.example.demo.service.TokenService;
@@ -11,7 +12,10 @@ import com.example.demo.service.UsuarioService;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,13 +36,21 @@ public class ChaveController {
     
     
     @PostMapping("/registro")
-    public void registrar(@RequestBody UsuarioBean usuario) {
+    public String registrar(@RequestBody UsuarioBean usuario) {
         servicea.registrar(usuario);
+        return "sucesso";
     }
     
-    @GetMapping("/teste")
-    public String testeToken() {
-        return service.gerarToken();
+    
+    
+    @PostMapping("/logar")
+    public String logar(@RequestBody AuthBean req){
+        AuthBean usuario = servicea.logar(req.getEmail(), req.getSenha());  
+        if(usuario.getEmail() != null){
+            return service.gerarToken(usuario.getEmail());
+        }else{
+            return "invalido";
+        }
     }
     
     @PostMapping("/validar-token")
@@ -51,6 +63,13 @@ public class ChaveController {
         } else {
             return "Token inválido ou expirado!";
         }
+    }
+    
+    @PutMapping("/modificar/{id}")
+    public String SalvarUsuario(@PathVariable int id, @RequestBody UsuarioBean update){
+        update.setId_usuario(id);
+        servicea.SalvarUsuario(update);
+        return "usuario atualizado com sucesso";
     }
     
 }

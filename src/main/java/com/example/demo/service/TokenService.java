@@ -4,6 +4,8 @@
  */
 package com.example.demo.service;
 
+import com.example.demo.model.AuthBean;
+import com.example.demo.repository.UsuarioDao;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -23,14 +25,16 @@ import org.springframework.stereotype.Service;
 public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
+    private UsuarioDao repository;
+    AuthBean auth = new AuthBean();
     
     private SecretKey getSignKey() {
         byte[] keyBytes = Decoders.BASE64.decode(this.secret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    public String gerarToken() {
+    public String gerarToken(String email) {
         return Jwts.builder()
-                .subject("luiz.teste@testes.com")
+                .subject(email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 300000))
                 .signWith(getSignKey())

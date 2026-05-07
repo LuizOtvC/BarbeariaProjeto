@@ -4,6 +4,7 @@
  */
 package com.example.demo.service;
 
+import com.example.demo.model.AuthBean;
 import com.example.demo.model.UsuarioBean;
 import com.example.demo.repository.BarbeirosDao;
 import com.example.demo.repository.UsuarioDao;
@@ -21,6 +22,12 @@ public class UsuarioService {
     
     public void registrar(UsuarioBean usuario){
         repository.registrar(usuario);
+    }
+    public AuthBean logar(String email, String senha){
+        return repository.logar(email, senha);
+    }
+    public void SalvarUsuario(UsuarioBean update){
+        repository.SalvarUsuario(update);
     }
     
 }
