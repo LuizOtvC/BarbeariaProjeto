@@ -5,7 +5,9 @@
 package com.example.demo.service;
 
 import com.example.demo.model.AuthBean;
+import com.example.demo.model.IdUsuarioBean;
 import com.example.demo.model.UsuarioBean;
+import com.example.demo.model.UsuarioLogarBean;
 import com.example.demo.repository.BarbeirosDao;
 import com.example.demo.repository.UsuarioDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ public class UsuarioService {
     @Autowired
     private UsuarioDao repository;
     
-    public void registrar(UsuarioBean usuario){
+    public void registrar(AuthBean usuario){
         repository.registrar(usuario);
     }
     public AuthBean logar(String email, String senha){
@@ -29,5 +31,8 @@ public class UsuarioService {
     public void SalvarUsuario(UsuarioBean update){
         repository.SalvarUsuario(update);
     }
+     public void DeletarUsuario(IdUsuarioBean update){
+         repository.DeletarUsuario(update);
+     }
     
 }

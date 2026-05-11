@@ -14,7 +14,10 @@ import io.jsonwebtoken.security.Keys;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 
 /**
@@ -36,7 +39,7 @@ public class TokenService {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 300000))
+                .expiration(new Date(System.currentTimeMillis() + 5000000))
                 .signWith(getSignKey())
                 .compact();
     }
@@ -51,8 +54,8 @@ public class TokenService {
             // Se chegou aqui, o token é válido
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            // Se qualquer exceção ocorrer, o token é inválido ou expirou
-            return false;
+            
+             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token expirado ou invalido");
         }
     }
     public Claims extrairClaims(String token) {

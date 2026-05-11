@@ -5,7 +5,9 @@
 package com.example.demo.repository;
 
 import com.example.demo.model.AuthBean;
+import com.example.demo.model.IdUsuarioBean;
 import com.example.demo.model.UsuarioBean;
+import com.example.demo.model.UsuarioLogarBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +21,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UsuarioDao {
     
-    public void registrar(UsuarioBean usuario){
+    public void registrar(AuthBean usuario){
         try{
             Connection conn = Conexao.conectar();
             PreparedStatement stmt = null;
@@ -49,8 +51,8 @@ public class UsuarioDao {
              rs = stmt.executeQuery();
 
             if (rs.next()) {         
-                usuario.setNome(rs.getString("nome"));
                 usuario.setEmail(rs.getString("email"));
+                usuario.setSenha(rs.getString("senha"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,6 +79,23 @@ public class UsuarioDao {
     }catch (SQLException e){
            e.printStackTrace();
         }
+        
+        
     
 }
+    public void DeletarUsuario(IdUsuarioBean update){
+            try{
+                Connection conn = Conexao.conectar();
+            PreparedStatement stmt = null;
+            
+            stmt = conn.prepareStatement("DELETE from usuarios WHERE id_usuario = ? ");
+            
+            stmt.setInt(1, update.getId_usuario());
+            
+            stmt.executeUpdate();
+            
+            }catch (SQLException e){
+           e.printStackTrace();
+        }
+        }
 }
